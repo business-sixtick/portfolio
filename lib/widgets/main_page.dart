@@ -8,13 +8,15 @@ import 'resume_page.dart';
 
 final pageIndexProvider = StateProvider<String>((ref) => 'resume',);
 
+// 페이지 구성 데이터 
 final Map<String, Widget> pageMap = {
   "resume" : ResumePage(),
   "test" : const Text("test")
 };
 
 class MainPage extends ConsumerWidget {
-  
+  const MainPage({super.key});
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final pageIndex = ref.watch(pageIndexProvider);   // 변경되면 다시 그림
@@ -37,7 +39,7 @@ class MainPage extends ConsumerWidget {
               child: const Text('목록', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 26, ), textAlign: TextAlign.end,),
             ),
             ...pageMap.keys.map((toElement) => ListTile(
-              title: Text(toElement, textAlign: TextAlign.end,),
+              title: Text(toElement, textAlign: TextAlign.end, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18,),),
               onTap: (){
                 Navigator.pop(context);
                 ref.read(pageIndexProvider.notifier).state = toElement;

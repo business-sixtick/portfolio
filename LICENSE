@@ -19,3 +19,27 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+---
+
+### Third-Party Licenses
+
+This application uses the following third-party libraries under the MIT License:
+
+1. **flutter_riverpod**
+   Copyright (c) 2020 Remi Rousselet
+   [License Details](https://pub.dev/packages/flutter_riverpod/license)
+
+
+
+This project uses the following open-source libraries:
+
+1. window_size
+   License: Apache License 2.0
+   Copyright (c) [window_size authors]
+   [License Details](https://pub.dev/packages/window_size/license)
+
+2. url_launcher
+   License: BSD-3-Clause
+   Copyright 2013 The Flutter Authors. All rights reserved.
+   [License Details](https://pub.dev/packages/url_launcher/license)
