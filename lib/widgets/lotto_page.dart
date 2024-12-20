@@ -11,6 +11,8 @@ import 'dart:io' as io;
 // notifier , provider, consumer
 
 final lottoProvider = StateProvider((ref) => drawWin());
+final nowTurnProvider = StateProvider<int?>((ref) => null);
+final lottoListProvider = StateProvider<List<List<int>>>((ref) => []);
 
 class LottoPage extends ConsumerWidget {
   const LottoPage({super.key});
@@ -21,6 +23,9 @@ class LottoPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     // final size = MediaQuery.of(context).size;
     List<int> wins = ref.watch(lottoProvider);
+    int? nowTurn = ref.watch(nowTurnProvider);
+    List<List<int>> lottoList = ref.watch(lottoListProvider);
+
     return ConstrainedBox(
       constraints: const BoxConstraints(maxWidth: 800),
       child: Scaffold(
@@ -89,7 +94,55 @@ class LottoPage extends ConsumerWidget {
             ),
             Expanded(
               flex: 6,
-              child: Text('당첨 리스트'),
+              child: Column(
+                children: [
+                  const Text(
+                    '당첨 리스트',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                  ),
+                  SizedBox(
+                    height: 450,
+                    child: FutureBuilder(
+                      future: lottoList.length >= 10 ? Future.value(lottoList) :getWinsTen(nowTurn),
+                      // future: getWinsTen(nowTurn),
+                      builder: (context, snapshot) {
+                        // 화면에 넘치면 스탑
+                        // 우선 10개만
+
+
+                        if (snapshot.connectionState == ConnectionState.waiting) {
+                          return Center(child: CircularProgressIndicator()); // 로딩 인디케이터
+                        } else if (snapshot.hasError) {
+                          return Center(child: Text('Error: ${snapshot.error}')); // 에러 처리
+                        } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                          return Center(child: Text('No Data Found')); // 데이터 없음 처리
+                        }
+                        ref.read(lottoListProvider.notifier).state = lottoList;
+                        ref.read(nowTurnProvider.notifier).state = lottoList.last[0];
+                        // 데이터를 성공적으로 가져왔을 때 ListView 표시
+                        return ListView.builder(
+                          itemCount: lottoList.length + 10,
+                          itemBuilder: (context, index) {
+                            debugPrint('itemBuilder index : $index');
+                            lottoList = lottoList + snapshot.data!;
+                            DateTime day = DateTime.fromMillisecondsSinceEpoch(lottoList[index][1]);
+                            return Container(
+                              margin: EdgeInsets.all(5),
+                              decoration: BoxDecoration(border: Border.all(color: Theme.of(context).colorScheme.primaryContainer), borderRadius: BorderRadius.all(Radius.elliptical(20, 20))),
+                              child: ListTile(
+                                title: Text('${lottoList[index][0]}회  추첨일 : ${day.year}년 ${day.month}월 ${day.day}일', textAlign: TextAlign.center,),
+                                subtitle: Text('${lottoList[index][2]} ${lottoList[index][3]} ${lottoList[index][4]} ${lottoList[index][5]} ${lottoList[index][6]} ${lottoList[index][7]} + ${lottoList[index][8]}',
+                                  style: TextStyle(fontSize: 26), textAlign: TextAlign.center,
+                                ),
+                              ),
+                            );
+                          },
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ),
             ),
           ],
         ),
@@ -104,7 +157,7 @@ class LottoPage extends ConsumerWidget {
               onPressed: () {
                 ref.read(lottoProvider.notifier).state = drawWin();
 
-                debugPrint('getFromHomepageWins : ${getFromHomepageWins(1150).then((onValue)=>debugPrint('getFromHomepageWins then $onValue'))}');
+                debugPrint('getFromHomepageWins : ${getFromHomepageWins(null).then((onValue)=>debugPrint('getFromHomepageWins then $onValue'))}');
               },
               child: LayoutBuilder(
                 builder: (context, constraints) {
@@ -119,9 +172,19 @@ class LottoPage extends ConsumerWidget {
   }
 }
 
+Future<List<List<int>>> getWinsTen(int? turnNum) async {
+  List<List<int>> list = [];
+  List<int> wins = [];
+  for (int i = 0; i < 10; i++){
+    wins = await getFromHomepageWins(turnNum);
+    list.add(wins);
+    turnNum = wins[0] - 1;
+  }
+  return list;
+}
 
 /// 모바일 페이지에서 크롤링 하기
-  Future<List<int>> _getWinsForAndroid(int turnNum) async {
+  Future<List<int>> _getWinsForAndroid(int? turnNum) async {
     // turnNum = 1144;
     var address = 'm.dhlottery.co.kr';
     var url = Uri.https(address, 'gameResult.do',{'method': 'byWin'});
@@ -158,7 +221,7 @@ class LottoPage extends ConsumerWidget {
     return <int>[turn, DateTime(year, month, day).millisecondsSinceEpoch] + win;
   }
 
-Future<List<int>> getFromHomepageWins(int turnNum) async {
+Future<List<int>> getFromHomepageWins(int? turnNum) async {
     if (io.Platform.isAndroid){
       return _getWinsForAndroid(turnNum);
     }
