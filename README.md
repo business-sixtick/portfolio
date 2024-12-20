@@ -11,6 +11,7 @@ sixtick portpolio
 ## 웹 배포
 - 웹 테스트 flutter run -d chrome
 - flutter build web --base-href="/portpolio/" -o docs   // 아웃풋 경로를 build/web 가 아닌 docs로 변경함. 
+- https://business-sixtick.github.io/portpolio/
 
 ## 플러터 맛보기
 - http://codelabs.developers.google.com/codelabs/flutter-codelab-first?hl=ko

@@ -41,16 +41,21 @@ class ResumePage extends StatelessWidget{
             ), 
             const ListTile(
               leading: Icon(Icons.circle, size: 8,),
-              title: Text('생년월일 : 820125', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+              title: Text('생년월일 : 820125 (43세)', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
             ), 
             const ListTile(
               leading: Icon(Icons.circle, size: 8,),
               title: Text('사는곳 : 경기도 포천시 신읍동 (미혼, 독거중)', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-            ), 
+            ),
             ListTile(
-              leading: const  Icon(Icons.circle, size: 8,),
+              leading: const  Icon(Icons.link, size: 18,),
               title: const  Text('연락처 : 텔레그램@sixtick', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
               onTap: () => _launchUrl('https://t.me/sixtick'),
+            ), 
+            ListTile(
+              leading: const  Icon(Icons.link, size: 18,),
+              title: const  Text('깃허브 : business-sixtick/portpolio', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+              onTap: () => _launchUrl('https://github.com/business-sixtick/portpolio'),
             ), 
             const ListTile(
               leading: Icon(Icons.circle, size: 8,),
