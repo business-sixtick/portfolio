@@ -97,7 +97,12 @@ class LottoPage extends ConsumerWidget {
             onPressed: () {
               ref.read(lottoProvider.notifier).state = drawWin();
             },
-            child: const Icon(Icons.celebration)),
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                var iconSize = constraints.maxWidth * 0.15;
+                return Icon(Icons.add, size: iconSize);
+              }
+            )),
       ),
     );
   }
