@@ -8,6 +8,8 @@ import 'dart:math' as math;
 final lottoProvider = StateProvider((ref) => drawWin());
 
 class LottoPage extends ConsumerWidget {
+  const LottoPage({super.key});
+
 
 
   @override
@@ -95,7 +97,7 @@ class LottoPage extends ConsumerWidget {
             onPressed: () {
               ref.read(lottoProvider.notifier).state = drawWin();
             },
-            child: Icon(Icons.celebration)),
+            child: const Icon(Icons.celebration)),
       ),
     );
   }
@@ -115,6 +117,7 @@ List<int> drawWin() {
   return wins;
 }
 
+/// 번호에 따라 색깔을 반환한다
 Color ballColor(int num) {
   Color? color = Colors.grey;
   if (num < 11) {
