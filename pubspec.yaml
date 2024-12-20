@@ -38,6 +38,9 @@ dependencies:
   flutter_riverpod: ^2.6.1
   window_size: ^0.1.0
   url_launcher: ^6.3.1
+  http: ^1.2.2
+  html: ^0.15.5
+  cp949_codec: ^1.0.2
 
 dev_dependencies:
   flutter_test:

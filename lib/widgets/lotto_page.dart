@@ -3,6 +3,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'dart:math' as math;
 
+
+import 'package:http/http.dart' as http;
+import 'package:html/parser.dart' as html;
+import 'package:cp949_codec/cp949_codec.dart' as cp949;
+import 'dart:io' as io;
 // notifier , provider, consumer
 
 final lottoProvider = StateProvider((ref) => drawWin());
@@ -88,25 +93,102 @@ class LottoPage extends ConsumerWidget {
             ),
           ],
         ),
-        floatingActionButton: ElevatedButton(
-            style: ButtonStyle(
-              elevation: WidgetStateProperty.all(10),
-              backgroundColor: WidgetStateProperty.all(
-                  Theme.of(context).colorScheme.inversePrimary),
-            ),
-            onPressed: () {
-              ref.read(lottoProvider.notifier).state = drawWin();
-            },
-            child: LayoutBuilder(
-              builder: (context, constraints) {
-                var iconSize = constraints.maxWidth * 0.15;
-                return Icon(Icons.add, size: iconSize);
-              }
-            )),
+        floatingActionButton: Container(
+          margin: const EdgeInsets.only(right: 50, bottom: 100),
+          child: ElevatedButton(
+              style: ButtonStyle(
+                elevation: WidgetStateProperty.all(10),
+                backgroundColor: WidgetStateProperty.all(
+                    Theme.of(context).colorScheme.inversePrimary),
+              ),
+              onPressed: () {
+                ref.read(lottoProvider.notifier).state = drawWin();
+
+                debugPrint('getFromHomepageWins : ${getFromHomepageWins(1150).then((onValue)=>debugPrint('getFromHomepageWins then $onValue'))}');
+              },
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  var iconSize = constraints.maxWidth * 0.15;
+                  return Icon(Icons.add, size: iconSize);
+                }
+              )),
+        ),
+        
       ),
     );
   }
 }
+
+
+/// 모바일 페이지에서 크롤링 하기
+  Future<List<int>> _getWinsForAndroid(int turnNum) async {
+    // turnNum = 1144;
+    var address = 'm.dhlottery.co.kr';
+    var url = Uri.https(address, 'gameResult.do',{'method': 'byWin'});
+    var response = await http.post(
+        url,
+        body: {'drwNo': '$turnNum', 'hdrwComb': '1', 'dwrNoList' : '$turnNum'}
+    );
+    debugPrint('response.statusCode : ${response.statusCode}');
+    // debugPrint('${response.body}');
+    var regex = RegExp(r'\d+');
+    var document = html.parse(cp949.cp949.decode(response.bodyBytes));
+    // debugPrint(document.outerHtml);
+    // var date = document.querySelector('#dwrNoList :first-child')?.text.trim();
+    var date = document.querySelector('#dwrNoList [selected]')?.text.trim();
+    debugPrint(date.toString());
+
+    var date1 = date?.split(' ').map((e) =>  regex.allMatches(e).map((m) => m.group(0))).toList();
+    debugPrint(date1.toString());
+    var date2 = date1?.toList();
+    debugPrint(date2?[0].toString());
+
+    debugPrint(date2?[0].toList()[0].toString());
+    debugPrint(date2?[0].toList()[1].toString());
+    debugPrint(date2?[1].toList()[0].toString());
+    debugPrint(date2?[2].toList()[0].toString());
+
+    int turn = int.parse(date2?[0].toList()[0] ?? '');
+    int year = int.parse(date2?[0].toList()[1] ?? '');
+    int month = int.parse(date2?[1].toList()[0] ?? '');
+    int  day= int.parse(date2?[2].toList()[0] ?? '');
+
+    List<int> win = document.querySelectorAll('span.ball').map((element)=> int.parse(element.text)).toList();
+
+    return <int>[turn, DateTime(year, month, day).millisecondsSinceEpoch] + win;
+  }
+
+Future<List<int>> getFromHomepageWins(int turnNum) async {
+    if (io.Platform.isAndroid){
+      return _getWinsForAndroid(turnNum);
+    }
+    var address = 'dhlottery.co.kr';
+    debugPrint('io.Platform.operatingSystem : ${io.Platform.operatingSystem.toString()}');
+
+    var url = Uri.https(address, 'gameResult.do',{'method': 'byWin'});
+    var response = await http.post(
+      url, 
+      body: {'drwNo': '$turnNum', 'hdrwComb': '1', 'dwrNoList' : '$turnNum'}
+      );
+    debugPrint('response.statusCode : ${response.statusCode}');
+    // debugPrint('${response.body}');
+    var regex = RegExp(r'\d+');
+    var document = html.parse(cp949.cp949.decode(response.bodyBytes));
+    // debugPrint(document.outerHtml);
+    var date = document.querySelector('p.desc')?.text;
+    debugPrint(date.toString());
+    var date1 = date?.split(' ').map((e) =>  regex.allMatches(e).map((m) => m.group(0))).toList();
+    debugPrint(date1.toString());
+    int year = int.parse(date1?[0].toList().join() ?? '');
+    int month = int.parse(date1?[1].toList().join() ?? '');
+    int  day= int.parse(date1?[2].toList().join() ?? '');
+    
+    String turn = regex.allMatches(document.querySelector('h4')?.text ?? '').map((e) => e.group(0)).toList().join();
+    
+    List<int> win = document.querySelectorAll('span.ball_645').map((element)=> int.parse(element.text)).toList();
+    
+    return <int>[int.parse(turn), DateTime(year, month, day).millisecondsSinceEpoch] + win;
+  } // end getFromHomepageWins
 
 /// 추천 번호 리스트를 반환한다.
 List<int> drawWin() {

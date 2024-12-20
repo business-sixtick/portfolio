@@ -26,7 +26,7 @@ class MainPage extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: const Text("Portpolio", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 26,),),
+        title: const Text("Portfolio", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 26,),),
       ),
       drawer: Drawer(
         
