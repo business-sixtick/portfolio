@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 Future<void> _launchUrl(String url) async {
@@ -13,6 +12,8 @@ Future<void> _launchUrl(String url) async {
 
 
 class ResumePage extends StatelessWidget{
+  const ResumePage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return ConstrainedBox(
