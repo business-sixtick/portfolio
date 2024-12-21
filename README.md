@@ -29,3 +29,8 @@ sixtick portfolio
   http: ^1.2.2
   html: ^0.15.5
   cp949_codec: ^1.0.2
+
+  ## ssh -i C:\Users\sixtick3\.ssh\ssh-key-2024-12-21.key ubuntu@144.24.78.242
+
+
+

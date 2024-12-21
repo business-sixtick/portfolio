@@ -1,7 +1,9 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'dart:math' as math;
+import 'package:flutter/foundation.dart';
 
 
 import 'package:http/http.dart' as http;
@@ -108,23 +110,32 @@ class LottoPage extends ConsumerWidget {
                       builder: (context, snapshot) {
                         // 화면에 넘치면 스탑
                         // 우선 10개만
-
+                        if (snapshot.connectionState == ConnectionState.done && snapshot.hasData) {
+                              // 안전한 데이터 처리
+                              debugPrint('${snapshot.data!}');
+                          lottoList = snapshot.data!;
+                          WidgetsBinding.instance.addPostFrameCallback((_) {
+                            // 위젯 트리가 빌드된 후 상태를 안전하게 업데이트
+                            ref.read(lottoListProvider.notifier).state = snapshot.data!;
+                          });
+                          // ref.read(lottoListProvider.notifier).state = snapshot.data!;
+                          // ref.read(nowTurnProvider.notifier).state = lottoList.isNotEmpty ? lottoList.last[0] : null;
+                            }
 
                         if (snapshot.connectionState == ConnectionState.waiting) {
                           return Center(child: CircularProgressIndicator()); // 로딩 인디케이터
                         } else if (snapshot.hasError) {
-                          return Center(child: Text('Error: ${snapshot.error}')); // 에러 처리
+                          return Center(child: Text('FutureBuilder Error: ${snapshot.error}')); // 에러 처리
                         } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
                           return Center(child: Text('No Data Found')); // 데이터 없음 처리
                         }
-                        ref.read(lottoListProvider.notifier).state = lottoList;
-                        ref.read(nowTurnProvider.notifier).state = lottoList.last[0];
+                        
+                        
                         // 데이터를 성공적으로 가져왔을 때 ListView 표시
                         return ListView.builder(
-                          itemCount: lottoList.length + 10,
+                          itemCount: lottoList.length,
                           itemBuilder: (context, index) {
                             debugPrint('itemBuilder index : $index');
-                            lottoList = lottoList + snapshot.data!;
                             DateTime day = DateTime.fromMillisecondsSinceEpoch(lottoList[index][1]);
                             return Container(
                               margin: EdgeInsets.all(5),
@@ -222,17 +233,24 @@ Future<List<List<int>>> getWinsTen(int? turnNum) async {
   }
 
 Future<List<int>> getFromHomepageWins(int? turnNum) async {
+  if(kIsWeb){
+    
+  }else{ // 웹환경이 아닐때
     if (io.Platform.isAndroid){
       return _getWinsForAndroid(turnNum);
     }
+  }
+    
     var address = 'dhlottery.co.kr';
-    debugPrint('io.Platform.operatingSystem : ${io.Platform.operatingSystem.toString()}');
-
+    // debugPrint('io.Platform.operatingSystem : ${io.Platform.operatingSystem.toString()}');
+    debugPrint("getFromHomepageWins");
     var url = Uri.https(address, 'gameResult.do',{'method': 'byWin'});
-    var response = await http.post(
+    debugPrint("getFromHomepageWins 1");
+    var response = await http.post( // XMLHttpRequest error // 브라우저 에서 크롤링이 안되네 ㅠㅠ TODO api 서버를 만들어서 운영해야겠음.
       url, 
       body: {'drwNo': '$turnNum', 'hdrwComb': '1', 'dwrNoList' : '$turnNum'}
       );
+    debugPrint("getFromHomepageWins 2");
     debugPrint('response.statusCode : ${response.statusCode}');
     // debugPrint('${response.body}');
     var regex = RegExp(r'\d+');
