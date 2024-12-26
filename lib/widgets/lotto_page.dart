@@ -10,6 +10,7 @@ import 'package:http/http.dart' as http;
 import 'package:html/parser.dart' as html;
 import 'package:cp949_codec/cp949_codec.dart' as cp949;
 import 'dart:io' as io;
+import 'dart:convert';  // JSON 처리 라이브러리
 // notifier , provider, consumer
 
 final lottoProvider = StateProvider((ref) => drawWin());
@@ -105,7 +106,8 @@ class LottoPage extends ConsumerWidget {
                   SizedBox(
                     height: 450,
                     child: FutureBuilder(
-                      future: lottoList.length >= 10 ? Future.value(lottoList) :getWinsTen(nowTurn),
+                      // future: lottoList.length >= 10 ? Future.value(lottoList) :getWinsTen(nowTurn),
+                      future: lottoList.length >= 100 ? Future.value(lottoList) :getWinsFromApi(),
                       // future: getWinsTen(nowTurn),
                       builder: (context, snapshot) {
                         // 화면에 넘치면 스탑
@@ -135,7 +137,7 @@ class LottoPage extends ConsumerWidget {
                         return ListView.builder(
                           itemCount: lottoList.length,
                           itemBuilder: (context, index) {
-                            debugPrint('itemBuilder index : $index');
+                            // debugPrint('itemBuilder index : $index');
                             DateTime day = DateTime.fromMillisecondsSinceEpoch(lottoList[index][1]);
                             return Container(
                               margin: EdgeInsets.all(5),
@@ -166,9 +168,10 @@ class LottoPage extends ConsumerWidget {
                     Theme.of(context).colorScheme.inversePrimary),
               ),
               onPressed: () {
+                // getWinsFromApi();
                 ref.read(lottoProvider.notifier).state = drawWin();
 
-                debugPrint('getFromHomepageWins : ${getFromHomepageWins(null).then((onValue)=>debugPrint('getFromHomepageWins then $onValue'))}');
+                // debugPrint('getFromHomepageWins : ${getFromHomepageWins(null).then((onValue)=>debugPrint('getFromHomepageWins then $onValue'))}');
               },
               child: LayoutBuilder(
                 builder: (context, constraints) {
@@ -183,6 +186,32 @@ class LottoPage extends ConsumerWidget {
   }
 }
 
+Future<List<List<int>>> getWinsFromApi() async{
+  List<List<int>> list = [];
+  var address = '144.24.78.242';
+  var url = Uri.http(address, 'lotto');
+  var response = await http.get(url);
+  // debugPrint('response.statusCode : ${response.body}');
+  List<dynamic> jsonList = jsonDecode(response.body);
+  debugPrint('jsonList ${jsonList[10]['turn']}');
+  jsonList.forEach((toElement){
+    
+    // debugPrint('jsonList.map : ${toElement["turn"]}');
+    list.add([toElement["turn"],
+      toElement["date"],
+      toElement["win1"],
+      toElement["win2"],
+      toElement["win3"],
+      toElement["win4"],
+      toElement["win5"],
+      toElement["win6"],
+      toElement["win7"]]);
+  });
+  debugPrint('jsonList.map end ${list.last}');
+  return list;
+}
+// [1151, 1734706800000, 2, 3, 9, 15, 27, 29, 8]
+// {turn: 1141, date: 1728658800000, grade1count: 11, grade1money: 27035341135, grade2count: 100, grade2money: 4505890200, grade3count: 3371, grade3money: 4505890973, grade4count: 165233, grade4money: 8261650000, grade5count: 2718563, grade5money: 13592815000, win1: 7, win2: 11, win3: 12, win4: 21, win5: 26, win6: 35, win7: 20, note: 1ë± ìë6 ìë5}
 Future<List<List<int>>> getWinsTen(int? turnNum) async {
   List<List<int>> list = [];
   List<int> wins = [];

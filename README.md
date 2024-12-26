@@ -24,11 +24,10 @@ sixtick portfolio
 - flutter pub add flutter_riverpod  : 상태관리, 프로바이더 상위버전
 - flutter pub add window_size   : 데스크탑 앱 화면 크기 설정
 - flutter pub add url_launcher  : 외부페이지를 실행 시킬수 있음. 
+- flutter pub add http  : 웹 통신
+- flutter pub add html  : html 파서
+- flutter pub add cp949_codec  : cp949 디코더 (로또 홈페이지가 cp949 로 인코딩 되어있음. )
 
-
-  http: ^1.2.2
-  html: ^0.15.5
-  cp949_codec: ^1.0.2
 
   ## ssh -i C:\Users\sixtick3\.ssh\ssh-key-2024-12-21.key ubuntu@144.24.78.242
 
