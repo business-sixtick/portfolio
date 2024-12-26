@@ -19842,7 +19842,7 @@ aa4(){var s=0,r=A.Q(t.oo),q,p,o,n,m
 var $async$aa4=A.R(function(a,b){if(a===1)return A.N(b,r)
 while(true)switch(s){case 0:p=A.b([],t.Zb)
 s=3
-return A.U(A.axe(A.auK("https","144.24.78.242","lotto",null)),$async$aa4)
+return A.U(A.axe(A.auK("https","lottoapi.duckdns.org","lotto",null)),$async$aa4)
 case 3:o=b
 n=B.cu.IN(A.awY(A.avc(o.e).c.a.i(0,"charset")).dL(o.w),null)
 m=J.aY(n)

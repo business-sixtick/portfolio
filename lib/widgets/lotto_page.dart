@@ -188,7 +188,7 @@ class LottoPage extends ConsumerWidget {
 
 Future<List<List<int>>> getWinsFromApi() async{
   List<List<int>> list = [];
-  var address = '144.24.78.242';
+  var address = 'lottoapi.duckdns.org';   // 144.24.78.242
   var url = Uri.https(address, 'lotto');
   var response = await http.get(url);
   // debugPrint('response.statusCode : ${response.body}');

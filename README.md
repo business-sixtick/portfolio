@@ -29,7 +29,8 @@ sixtick portfolio
 - flutter pub add cp949_codec  : cp949 디코더 (로또 홈페이지가 cp949 로 인코딩 되어있음. )
 
 
-  ## ssh -i C:\Users\sixtick3\.ssh\ssh-key-2024-12-21.key ubuntu@144.24.78.242
-
+## 로또  api 
+- ssh -i C:\Users\sixtick3\.ssh\ssh-key-2024-12-21.key ubuntu@144.24.78.242
+- https://lottoapi.duckdns.org/lotto
 
 
