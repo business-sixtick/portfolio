@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';  // JSON 처리 라이브러리
 // notifier , provider, consumer
 
+final answerProvider = StateProvider<Future<String>?>((ref) => null);
 
 const String defaultRole = '사용자가 입력한 숫자 중에 제일 큰 숫자를 말해보세요. 상냥하고 해맑고 귀여운 꼬마 말투로 대답해줘';
 const String defaultQuery = '10, 20, 30, 40, 100, 60, 70, 80';
@@ -18,6 +19,8 @@ class LLMPage extends ConsumerWidget{
     final TextEditingController _controller_query = TextEditingController();
     _controller.text = defaultRole;
     _controller_query.text = defaultQuery;
+    Future<String>? _future;
+    Future<String>? answerConsumer = ref.watch(answerProvider);
 
     return Scaffold(
       body: Column(
@@ -45,16 +48,33 @@ class LLMPage extends ConsumerWidget{
               
             ),
           ),
+          
           Padding(
             padding: const EdgeInsets.only(left: 8, right: 8, top: 8),
-            child: TextField(
-              controller: _controller_answer,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'answer : '
-              ),
-              maxLines: 20,
-              minLines: 1,
+            child: FutureBuilder(
+              future: answerConsumer,
+              builder: (context, snapshot) {
+                // Future 상태 처리
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const CircularProgressIndicator(); // 로딩 표시
+                } else if (snapshot.hasError) {
+                  return Text("에러 발생: ${snapshot.error}");
+                } else if (snapshot.hasData) {
+                  _controller_answer.text = snapshot.data!;
+                  return TextField(
+                    controller: _controller_answer,
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: 'answer : '
+                    ),
+                    maxLines: 20,
+                    minLines: 1,
+                  );
+                } else {
+                  return const Text("버튼을 눌러 데이터를 불러오세요!");
+                }
+                
+              }
             ),
           ),
           Padding(
@@ -68,21 +88,10 @@ class LLMPage extends ConsumerWidget{
               maxLines: 1,
             ),
           ),
+          
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: FutureBuilder(
-              future: null,
-              // future: query(_controller.text, _controller_query.text),
-              builder: (context, snapshot) {
-                return ElevatedButton(onPressed: (){
-                  query(_controller.text, _controller_query.text)
-                    .then((onValue){
-                      debugPrint(onValue);
-                      _controller_answer.text = onValue;
-                    });
-                }, child: Text('전송'));
-              }
-            ),
+            child: ElevatedButton(onPressed: (){ref.read(answerProvider.notifier).state = query(_controller.text, _controller_query.text);}, child: Text('전송')),
           ),
         ],
       ),
