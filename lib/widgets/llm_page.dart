@@ -22,78 +22,81 @@ class LLMPage extends ConsumerWidget{
     Future<String>? _future;
     Future<String>? answerConsumer = ref.watch(answerProvider);
 
-    return Scaffold(
-      body: Column(
-        children: [
-          const Text(
-              'LLM chatbot',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 26),
-            ),
-            Divider(
-              height: 20,
-              thickness: 10,
-              indent: 50,
-              endIndent: 50,
-              color: Theme.of(context).colorScheme.primaryContainer,
-            ),
-          Padding(
-            padding: const EdgeInsets.only(left: 8, right: 8, top: 8),
-            child: TextField(
-              controller: _controller,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'role : 사용자 맞춤 역할을 지정할 수 있습니다.'
+    return ConstrainedBox(
+      constraints: const BoxConstraints(maxWidth: 800),
+      child: Scaffold(
+        body: Column(
+          children: [
+            const Text(
+                'LLM chatbot',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 26),
               ),
-              maxLines: 4,
-              
-            ),
-          ),
-          
-          Padding(
-            padding: const EdgeInsets.only(left: 8, right: 8, top: 8),
-            child: FutureBuilder(
-              future: answerConsumer,
-              builder: (context, snapshot) {
-                // Future 상태 처리
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const CircularProgressIndicator(); // 로딩 표시
-                } else if (snapshot.hasError) {
-                  return Text("에러 발생: ${snapshot.error}");
-                } else if (snapshot.hasData) {
-                  _controller_answer.text = snapshot.data!;
-                  return TextField(
-                    controller: _controller_answer,
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'answer : '
-                    ),
-                    maxLines: 20,
-                    minLines: 1,
-                  );
-                } else {
-                  return const Text("버튼을 눌러 데이터를 불러오세요!");
-                }
+              Divider(
+                height: 20,
+                thickness: 10,
+                indent: 50,
+                endIndent: 50,
+                color: Theme.of(context).colorScheme.primaryContainer,
+              ),
+            Padding(
+              padding: const EdgeInsets.only(left: 8, right: 8, top: 8),
+              child: TextField(
+                controller: _controller,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'role : 사용자 맞춤 역할을 지정할 수 있습니다.'
+                ),
+                maxLines: 4,
                 
-              }
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 8, right: 8, top: 8),
-            child: TextField(
-              controller: _controller_query,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'query : 대화를 시작하세요.'
               ),
-              maxLines: 1,
             ),
-          ),
-          
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: ElevatedButton(onPressed: (){ref.read(answerProvider.notifier).state = query(_controller.text, _controller_query.text);}, child: Text('전송')),
-          ),
-        ],
+            
+            Padding(
+              padding: const EdgeInsets.only(left: 8, right: 8, top: 8),
+              child: FutureBuilder(
+                future: answerConsumer,
+                builder: (context, snapshot) {
+                  // Future 상태 처리
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const CircularProgressIndicator(); // 로딩 표시
+                  } else if (snapshot.hasError) {
+                    return Text("에러 발생: ${snapshot.error}");
+                  } else if (snapshot.hasData) {
+                    _controller_answer.text = snapshot.data!;
+                    return TextField(
+                      controller: _controller_answer,
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: 'answer : '
+                      ),
+                      maxLines: 20,
+                      minLines: 1,
+                    );
+                  } else {
+                    return const Text("버튼을 눌러 데이터를 불러오세요!");
+                  }
+                  
+                }
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 8, right: 8, top: 8),
+              child: TextField(
+                controller: _controller_query,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'query : 대화를 시작하세요.'
+                ),
+                maxLines: 1,
+              ),
+            ),
+            
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ElevatedButton(onPressed: (){ref.read(answerProvider.notifier).state = query(_controller.text, _controller_query.text);}, child: Text('전송')),
+            ),
+          ],
+        ),
       ),
     );
   }
