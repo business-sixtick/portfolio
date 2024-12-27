@@ -74840,7 +74840,7 @@ A.a47.prototype={
 Yo(a){$.ak0().n(0,this,a)}}
 A.HJ.prototype={
 M(a){var s=null
-return new A.wY(new A.Hw(s),"Flutter Demo",A.rC(s,A.aoc(B.a1,s,s,B.GF),!0),s)}}
+return new A.wY(new A.Hw(s),"sixtick portfolio",A.rC(s,A.aoc(B.a1,s,s,B.GF),!0),s)}}
 A.aj_.prototype={
 $1(a){return null},
 $S:462}
