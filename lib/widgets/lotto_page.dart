@@ -11,11 +11,16 @@ import 'package:html/parser.dart' as html;
 import 'package:cp949_codec/cp949_codec.dart' as cp949;
 import 'dart:io' as io;
 import 'dart:convert';  // JSON 처리 라이브러리
+import 'package:portpolio/sixtick.dart';
 // notifier , provider, consumer
 
-final lottoProvider = StateProvider((ref) => drawWin());
+List<int> listWeight = List.generate(45, (i) => i + 1);
+final lottoProvider = StateProvider((ref) => drawLotto(listWeight));
 final nowTurnProvider = StateProvider<int?>((ref) => null);
 final lottoListProvider = StateProvider<List<List<int>>>((ref) => []);
+final weightProvider = StateProvider<double>((ref) => 10);
+
+
 
 class LottoPage extends ConsumerWidget {
   const LottoPage({super.key});
@@ -28,6 +33,7 @@ class LottoPage extends ConsumerWidget {
     List<int> wins = ref.watch(lottoProvider);
     int? nowTurn = ref.watch(nowTurnProvider);
     List<List<int>> lottoList = ref.watch(lottoListProvider);
+    double weightState = ref.watch(weightProvider);
 
     return ConstrainedBox(
       constraints: const BoxConstraints(maxWidth: 800),
@@ -95,6 +101,23 @@ class LottoPage extends ConsumerWidget {
               endIndent: 50,
               color: Theme.of(context).colorScheme.primaryContainer,
             ),
+            const Text('최근 당첨된 회차를 몇개까지 가중시킬까요? (기본 10개 회차)' ,),
+            Slider(
+              value: weightState, 
+              min : 0,
+              max: 20,
+              divisions: 20,
+              label: weightState.toStringAsFixed(0), // 소수점 0 자리까지 표시
+              onChanged: (val){
+                ref.read(weightProvider.notifier).state = val;
+              }),
+            Divider(
+              height: 20,
+              thickness: 10,
+              indent: 50,
+              endIndent: 50,
+              color: Theme.of(context).colorScheme.primaryContainer,
+            ),
             Expanded(
               flex: 6,
               child: Column(
@@ -114,7 +137,7 @@ class LottoPage extends ConsumerWidget {
                         // 우선 10개만
                         if (snapshot.connectionState == ConnectionState.done && snapshot.hasData) {
                               // 안전한 데이터 처리
-                              debugPrint('${snapshot.data!}');
+                              // debugPrint('${snapshot.data!}');
                           lottoList = snapshot.data!;
                           WidgetsBinding.instance.addPostFrameCallback((_) {
                             // 위젯 트리가 빌드된 후 상태를 안전하게 업데이트
@@ -168,8 +191,19 @@ class LottoPage extends ConsumerWidget {
                     Theme.of(context).colorScheme.inversePrimary),
               ),
               onPressed: () {
-                // getWinsFromApi();
-                ref.read(lottoProvider.notifier).state = drawWin();
+                // 가중치 리스트 생성, 가중시킬 리스트 개수
+                List<int> weight = [];
+                for (int i = 0; i < weightState; i++){
+                  weight.add(lottoList[i][2]);
+                  weight.add(lottoList[i][3]);
+                  weight.add(lottoList[i][4]);
+                  weight.add(lottoList[i][5]);
+                  weight.add(lottoList[i][6]);
+                  weight.add(lottoList[i][7]);
+                }
+                log.info('weight : $weight');
+                // listWeight = 
+                ref.read(lottoProvider.notifier).state = drawLotto(listWeight + weight);
 
                 // debugPrint('getFromHomepageWins : ${getFromHomepageWins(null).then((onValue)=>debugPrint('getFromHomepageWins then $onValue'))}');
               },
@@ -300,19 +334,6 @@ Future<List<int>> getFromHomepageWins(int? turnNum) async {
     return <int>[int.parse(turn), DateTime(year, month, day).millisecondsSinceEpoch] + win;
   } // end getFromHomepageWins
 
-/// 추천 번호 리스트를 반환한다.
-List<int> drawWin() {
-  Set<int> win = {};
-  // var numList = List.generate(45, (index) => index + 1);
-  while (win.length < 6) {
-    int num = math.Random().nextInt(45) + 1;
-    win.add(num);
-  }
-  List<int> wins = win.toList();
-  wins.sort();
-  debugPrint('drawWin : $wins');
-  return wins;
-}
 
 /// 번호에 따라 색깔을 반환한다
 Color ballColor(int num) {

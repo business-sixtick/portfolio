@@ -6,10 +6,11 @@ import 'package:flutter/foundation.dart';
 import 'package:window_size/window_size.dart';
 import 'dart:io';
 
-
+import 'package:portpolio/sixtick.dart';
 import 'widgets/main_page.dart';
-void main() {
 
+void main() {
+  logInit();
   if (kIsWeb) {
     // 웹에서만 동작하는 코드를 삽입하시오. 삽입?? ㅋㅋㅋ
   } else { // 웹 빌드시에 네이티브 코드들이 에러를 일으킴킴
