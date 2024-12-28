@@ -107,7 +107,7 @@ class LottoPage extends ConsumerWidget {
               endIndent: 50,
               color: Theme.of(context).colorScheme.primaryContainer,
             ),
-            const Text('최근 당첨된 회차를 몇개까지 가중시킬까요? (기본 10개 회차)' ,),
+            Text('최근 당첨된 ${weightState.toStringAsFixed(0)}개 회차까지 가중합니다. (기본 10개 회차)' ,),
             Slider(
               value: weightState, 
               min : 0,
