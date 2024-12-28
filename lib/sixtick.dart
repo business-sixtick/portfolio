@@ -1,5 +1,7 @@
 import 'dart:math';
 import 'package:logging/logging.dart';
+import 'package:url_launcher/url_launcher.dart';
+
 
 
 
@@ -17,6 +19,15 @@ void logInit(){
   Logger.root.onRecord.listen((record) {
     print('${record.level.name}: ${record.time}: ${record.message}');
   });
+}
+
+Future<void> linkUrl(String url) async {
+  final Uri uri = Uri.parse(url);
+  if (await canLaunchUrl(uri)) {
+    await launchUrl(uri, mode: LaunchMode.externalApplication);
+  } else {
+    log.warning('Could not launch $url');
+  }
 }
 
 

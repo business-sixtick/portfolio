@@ -1,8 +1,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'dart:math' as math;
 import 'package:flutter/foundation.dart';
 
 
@@ -41,9 +39,17 @@ class LottoPage extends ConsumerWidget {
         body: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text(
-              'LOTTO',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 26),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: InkWell(
+                onTap: () {
+                  linkUrl('https://www.dhlottery.co.kr/common.do?method=main');
+                },
+                child: const Text(
+                  'LOTTO',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 26),
+                ),
+              ),
             ),
             Divider(
               height: 20,
