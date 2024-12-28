@@ -107,7 +107,7 @@ class LottoPage extends ConsumerWidget {
               endIndent: 50,
               color: Theme.of(context).colorScheme.primaryContainer,
             ),
-            Text('최근 당첨된 ${weightState.toStringAsFixed(0)}개 회차까지 가중합니다. (기본 10개 회차)' ,),
+            Text('최근 당첨된 ${weightState.toStringAsFixed(0)}개 회차까지 추천 번호 확률에 가중합니다.' ,),
             Slider(
               value: weightState, 
               min : 0,

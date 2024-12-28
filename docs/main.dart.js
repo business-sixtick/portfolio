@@ -76200,7 +76200,7 @@ m=A.GG(A.aDe(m,B.bj,B.ec),1)
 l=A.S(a).ax
 k=l.d
 l=k==null?l.b:k
-k=A.el("\ucd5c\uadfc \ub2f9\ucca8\ub41c "+B.d.a5(q,0)+"\uac1c \ud68c\ucc28\uae4c\uc9c0 \uac00\uc911\ud569\ub2c8\ub2e4. (\uae30\ubcf8 10\uac1c \ud68c\ucc28)",g,g,g,g,g,g)
+k=A.el("\ucd5c\uadfc \ub2f9\ucca8\ub41c "+B.d.a5(q,0)+"\uac1c \ud68c\ucc28\uae4c\uc9c0 \ucd94\ucc9c \ubc88\ud638 \ud655\ub960\uc5d0 \uac00\uc911\ud569\ub2c8\ub2e4.",g,g,g,g,g,g)
 j=B.d.a5(q,0)
 i=A.S(a).ax
 h=i.d
