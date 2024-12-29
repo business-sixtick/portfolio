@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:portpolio/widgets/llm_page.dart';
+import 'package:portpolio/widgets/riverpod_test.dart';
 
 // 페이지들
 import 'resume_page.dart';
@@ -16,6 +17,7 @@ final Map<String, Widget> pageMap = {
   "RESUME" : const ResumePage(),
   "LOTTO" : LottoPage(),
   "LLM" : LLMPage(),
+  "riverpod TEST" : RiverpodTest1(),
 };
 
 class MainPage extends ConsumerWidget {

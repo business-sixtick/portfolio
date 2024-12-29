@@ -36,9 +36,20 @@ class ResumePage extends StatelessWidget{
               indent: 120,
               endIndent: 120,
             ),
-            const ListTile(
-              leading: Icon(Icons.circle, size: 8,),
-              title: Text('이름 : 조영훈', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+            ListTile(
+              leading: const Icon(Icons.circle, size: 8,),
+              title: const Text('이름 : 조영훈', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+              onTap: (){
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context){
+                    return const AlertDialog(
+                      title: Text('Cho Young Hoon'),
+                      content: Text('曺 永 訓', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),),
+                    );
+                  },
+                );
+              },
             ), 
             const ListTile(
               leading: Icon(Icons.circle, size: 8,),

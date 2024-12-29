@@ -233,7 +233,7 @@ Future<List<List<int>>> getWinsFromApi() async{
   var response = await http.get(url);
   // debugPrint('response.statusCode : ${response.body}');
   List<dynamic> jsonList = jsonDecode(response.body);
-  debugPrint('jsonList ${jsonList[10]['turn']}');
+  debugPrint('jsonList ${jsonList[0].keys}');
   jsonList.forEach((toElement){
     
     // debugPrint('jsonList.map : ${toElement["turn"]}');
