@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:portpolio/widgets/dropdownbutton_test.dart';
 import 'package:portpolio/widgets/llm_page.dart';
+import 'package:portpolio/widgets/pong_page.dart';
 import 'package:portpolio/widgets/riverpod_test.dart';
 
 // 페이지들
@@ -17,7 +19,9 @@ final Map<String, Widget> pageMap = {
   "RESUME" : const ResumePage(),
   "LOTTO" : LottoPage(),
   "LLM" : LLMPage(),
+  "PONG GAME" : PongStateful(),
   "riverpod TEST" : RiverpodTest1(),
+  "dropdownbutton TEST" : DropdownButtonTest(),
 };
 
 class MainPage extends ConsumerWidget {
@@ -56,8 +60,10 @@ class MainPage extends ConsumerWidget {
             
         ),
       ),
-      body: Center(
-        child: pageMap[pageIndex],
+      body: SafeArea(
+        child: Center(
+          child: pageMap[pageIndex],
+        ),
       ),
     );
   }         
