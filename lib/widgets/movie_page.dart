@@ -8,8 +8,7 @@ class MoviePage extends ConsumerWidget {
   final TextEditingController _textController = TextEditingController();
   final loadingProvider = StateProvider((ref) => false);
   final moviesProvider = StateProvider<List<Movie>>((ref) => []);
-  
-  
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // double height = MediaQuery.of(context).size.height;
@@ -20,81 +19,118 @@ class MoviePage extends ConsumerWidget {
       body: Center(
         child: ConstrainedBox(
           constraints: const BoxConstraints(
-            maxWidth: 800,  
+            maxWidth: 800,
           ),
           child: Column(
-              children: [
-                SizedBox(height: 20,),
-                Container(
-                  padding: EdgeInsets.only(bottom: 20),
-                  child: Row(
-                    children: [
-                      SizedBox(width: 20,),
-                      Expanded(
-                        child: TextField(
-                          onSubmitted: (value){
-                            context.findAncestorWidgetOfExactType<ElevatedButton>()?.onPressed!();
-                          },
-                          controller: _textController,
-                          decoration: const InputDecoration(
+            children: [
+              SizedBox(
+                height: 20,
+              ),
+              Container(
+                padding: EdgeInsets.only(bottom: 20),
+                child: Row(
+                  children: [
+                    SizedBox(
+                      width: 20,
+                    ),
+                    Expanded(
+                      child: TextField(
+                        onSubmitted: (value) {
+                          context
+                              .findAncestorWidgetOfExactType<ElevatedButton>()
+                              ?.onPressed!();
+                        },
+                        controller: _textController,
+                        decoration: const InputDecoration(
                             border: OutlineInputBorder(),
-                            labelText: '제목 또는 배우이름을 입력하세요.'
-                          ),
-                          maxLines: 1,
-                        ),
+                            labelText: '제목 또는 배우이름을 입력하세요.'),
+                        maxLines: 1,
                       ),
-                      SizedBox(width: 20,),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: ElevatedButton(
-                          onPressed: (){
+                    ),
+                    SizedBox(
+                      width: 20,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ElevatedButton(
+                          onPressed: () {
                             ref.read(loadingProvider.notifier).state = true;
                             debugPrint(_textController.text);
-                            search(_textController.text).then((onValue){
+                            search(_textController.text).then((onValue) {
                               ref.read(loadingProvider.notifier).state = false;
                               ref.read(moviesProvider.notifier).state = onValue;
-                              });
-                          }, 
-                          child: isLoading ? const CircularProgressIndicator() : const Text('검색')),
-                      ),
-                      SizedBox(width: 20,),
-                    ],
-                  ),
-                ),
-                Expanded(
-                  // height: 600,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: ListView(
-                      children: movies.map((toElement)=> Container(
-                        margin: EdgeInsets.only(bottom: 5),
-                        child: ListTile(
-                          minVerticalPadding: 20,
-                          shape: RoundedRectangleBorder(
-                                      side: BorderSide(color: Theme.of(context).colorScheme.primaryContainer, width: 1.0), // 테두리 색상과 두께
-                                      borderRadius: BorderRadius.circular(32.0), // 둥근 모서리
-                                    ),
-                          leading: CircleAvatar(backgroundImage: NetworkImage('https://image.tmdb.org/t/p/w300_and_h450_bestv2${toElement.posterPath}'),),
-                          title: Text(toElement.title),
-                          onTap: (){
-                            MaterialPageRoute route = MaterialPageRoute(builder: (builder){
-                              return Scaffold(
-                                appBar: AppBar(title: Text(toElement.title),), // 이걸 넣어야지 뒤로가기 버튼이 자동으로 생기네네
-                                body: Center(
-                                  child: Image.network('https://image.tmdb.org/t/p/w300_and_h450_bestv2${toElement.posterPath}'),
-                                ),
-                              );
                             });
-                            Navigator.push(context, route);
                           },
-                        ),
-                      )).toList(),
+                          child: isLoading
+                              ? const CircularProgressIndicator()
+                              : const Text('검색')),
                     ),
+                    const SizedBox(
+                      width: 20,
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                // height: 600,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ListView(
+                    children: movies
+                        .map((toElement) => Container(
+                              margin: EdgeInsets.only(bottom: 5),
+                              child: ListTile(
+                                minVerticalPadding: 20,
+                                shape: RoundedRectangleBorder(
+                                  side: BorderSide(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .primaryContainer,
+                                      width: 1.0), // 테두리 색상과 두께
+                                  borderRadius:
+                                      BorderRadius.circular(32.0), // 둥근 모서리
+                                ),
+                                leading: CircleAvatar(
+                                  backgroundImage: NetworkImage(
+                                      'https://image.tmdb.org/t/p/w300_and_h450_bestv2${toElement.posterPath}'),
+                                ),
+                                title: Text(toElement.title),
+                                onTap: () {
+                                  MaterialPageRoute route =
+                                      MaterialPageRoute(builder: (builder) {
+                                    return Scaffold(
+                                      appBar: AppBar(
+                                        title: Text(toElement.title),
+                                      ), // 이걸 넣어야지 뒤로가기 버튼이 자동으로 생기네네
+                                      body: Center(
+                                        child: Column(
+                                          children: [
+                                            Image.network(
+                                                'https://image.tmdb.org/t/p/w300_and_h450_bestv2${toElement.posterPath}'),
+                                            Expanded(
+                                                child: SingleChildScrollView(
+                                                    child: Container(
+                                                        margin:
+                                                            EdgeInsets.all(48),
+                                                        child: Text(toElement
+                                                            .overview
+                                                            .replaceAll(
+                                                                RegExp(r'\.'),
+                                                                '.\r\n'))))),
+                                          ],
+                                        ),
+                                      ),
+                                    );
+                                  });
+                                  Navigator.push(context, route);
+                                },
+                              ),
+                            ))
+                        .toList(),
                   ),
                 ),
-                
-
-              ],
+              ),
+            ],
           ),
         ),
       ),
@@ -103,35 +139,42 @@ class MoviePage extends ConsumerWidget {
 }
 
 Future<List<Movie>> search(String multi) async {
-  String address = 'api.themoviedb.org'; //  /3/search/multi?query=$multi&include_adult=true&language=ko-KR&page=1';
-  var url = Uri.https(address, '/3/search/multi', {'query': multi, 'include_adult': 'true', 'language': 'ko-KR', 'page': '1'});
-  
+  String address =
+      'api.themoviedb.org'; //  /3/search/multi?query=$multi&include_adult=true&language=ko-KR&page=1';
+  var url = Uri.https(address, '/3/search/multi', {
+    'query': multi,
+    'include_adult': 'true',
+    'language': 'ko-KR',
+    'page': '1'
+  });
+
   var headers = {
     "accept": "application/json",
-    "Authorization": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI3Mjc5ZDVjNjk5Yzc3MDE0ZjkwNDVjNzQ5YTFiYWRjMCIsIm5iZiI6MTczNTUzODQyNS4zNDksInN1YiI6IjY3NzIzNmY5NjNmOTBmOGY2NjkyNmY0ZiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.HM8nLNszGVUqmRzMzXQhwggs_HWt0qdZxR8IcEeRT6A"
+    "Authorization":
+        "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI3Mjc5ZDVjNjk5Yzc3MDE0ZjkwNDVjNzQ5YTFiYWRjMCIsIm5iZiI6MTczNTUzODQyNS4zNDksInN1YiI6IjY3NzIzNmY5NjNmOTBmOGY2NjkyNmY0ZiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.HM8nLNszGVUqmRzMzXQhwggs_HWt0qdZxR8IcEeRT6A"
   };
-  http.Response response; 
-  try{
-    response = await http.get(url, headers: headers);  // 시간제한이 가끔 걸리네
-  }catch (e){
+  http.Response response;
+  try {
+    response = await http.get(url, headers: headers); // 시간제한이 가끔 걸리네
+  } catch (e) {
     debugPrint(e.toString());
     return [];
   }
-  
+
   dynamic resMap = jsonDecode(response.body);
   // resMap['results'].forEach((value)=> debugPrint(value.toString()));
   // List<Movie> movies = resMap['results'].where((value) => value.containsKey('title')).map((value) => Movie.fromJson(value)).toList();
   debugPrint(response.body);
   // debugPrint(resMap['results'][0]['title']);
   // debugPrint(movies.toString());
-  if(resMap['total_results'] == 0) return [];
+  if (resMap['total_results'] == 0) return [];
   dynamic results = resMap['results'];
-  
+
   List<Movie> movies = [];
   if (results is List) {
-    if (results[0].containsKey('known_for')){
+    if (results[0].containsKey('known_for')) {
       var subResults = results[0]['known_for'];
-      
+
       debugPrint("subResults");
       debugPrint(subResults.toString());
       // movies = subResults
@@ -139,18 +182,18 @@ Future<List<Movie>> search(String multi) async {
       //   .map((value) => Movie.fromJson(value as Map<String, dynamic>))
       //   .toList() as List<Movie>;
       subResults.forEach((v) => movies.add(Movie.fromJson(v)));
-    }else{
+    } else {
       movies = results
-        .where((value) => value is Map<String, dynamic> && value.containsKey('title'))
-        .map((value){ debugPrint(value.toString()); return Movie.fromJson(value as Map<String, dynamic>);})
-        .toList();
+          .where((value) =>
+              value is Map<String, dynamic> && value.containsKey('title'))
+          .map((value) {
+        debugPrint(value.toString());
+        return Movie.fromJson(value as Map<String, dynamic>);
+      }).toList();
     }
-    
-    
 
     debugPrint(movies.length.toString()); // 디버깅용 출력
   }
-
 
   return movies;
   // var address = 'lottoapi.duckdns.org';   // 144.24.78.242
@@ -161,25 +204,33 @@ Future<List<Movie>> search(String multi) async {
   // debugPrint('jsonList ${jsonList[0].keys}');
 }
 
-
+//overview
 class Movie {
   final int id;
   final String title;
   final String posterPath;
+  final String overview;
 
   Movie({
     required this.id,
     required this.title,
     required this.posterPath,
+    required this.overview,
   });
 
   // JSON → 객체 변환
   factory Movie.fromJson(Map<String, dynamic> json) {
     return Movie(
-      id: json['id'] as int,
-      title: json.containsKey('name') ? json['name'] as String : json['title'] as String,
-      posterPath: json['poster_path'] == null || json['poster_path'] == 'null' ? '' : json['poster_path'] as String,
-    );
+        id: json['id'] as int,
+        title: json.containsKey('name')
+            ? json['name'] as String
+            : json['title'] as String,
+        posterPath: json['poster_path'] == null || json['poster_path'] == 'null'
+            ? ''
+            : json['poster_path'] as String,
+        overview: json['overview'] == null || json['overview'] == 'null'
+            ? ''
+            : json['overview'] as String);
   }
 
   // 객체 → JSON 변환
@@ -188,6 +239,7 @@ class Movie {
       'id': id,
       'title': title,
       'poster_path': posterPath,
+      'overview': overview,
     };
   }
 }
