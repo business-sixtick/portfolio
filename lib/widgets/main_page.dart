@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:portpolio/widgets/dropdownbutton_test.dart';
 import 'package:portpolio/widgets/llm_page.dart';
+import 'package:portpolio/widgets/movie_page.dart';
 import 'package:portpolio/widgets/pong_page.dart';
 import 'package:portpolio/widgets/riverpod_test.dart';
 
@@ -20,8 +21,9 @@ final Map<String, Widget> pageMap = {
   "LOTTO" : LottoPage(),
   "LLM" : LLMPage(),
   "PONG GAME" : PongStateful(),
+  "MOVIE" : MoviePage(),
   "riverpod TEST" : RiverpodTest1(),
-  "dropdownbutton TEST" : DropdownButtonTest(),
+  "dropdownbutton TEST" : DropdownButtonTest(), 
 };
 
 class MainPage extends ConsumerWidget {
