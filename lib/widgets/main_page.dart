@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:portpolio/widgets/dropdownbutton_test.dart';
+import 'package:portpolio/widgets/firebase.dart';
 import 'package:portpolio/widgets/llm_page.dart';
 import 'package:portpolio/widgets/movie_page.dart';
 import 'package:portpolio/widgets/pong_page.dart';
@@ -22,6 +23,7 @@ final Map<String, Widget> pageMap = {
   "LLM" : LLMPage(),
   "PONG GAME" : PongStateful(),
   "MOVIE" : MoviePage(),
+  "FIREBASE" : Firebase(),
   "riverpod TEST" : RiverpodTest1(),
   "dropdownbutton TEST" : DropdownButtonTest(), 
 };
