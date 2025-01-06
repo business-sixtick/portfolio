@@ -6,6 +6,7 @@ import 'package:portpolio/widgets/bloc.dart';
 import 'package:portpolio/widgets/llm_page.dart';
 import 'package:portpolio/widgets/movie_page.dart';
 import 'package:portpolio/widgets/pong_page.dart';
+import 'package:portpolio/widgets/todo_page.dart';
 // import 'package:portpolio/widgets/riverpod_test.dart';
 
 // 페이지들
@@ -21,6 +22,7 @@ final pageIndexProvider = StateProvider<String>((ref) => 'RESUME',);
 final Map<String, Widget> pageMap = {
   "RESUME" : const ResumePage(),
   "LOTTO" : LottoPage(),
+  "TODO" : TodoPage(),
   "LLM" : LLMPage(),
   "PONG GAME" : PongStateful(),
   "MOVIE" : MoviePage(),

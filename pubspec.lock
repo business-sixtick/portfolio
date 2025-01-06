@@ -136,6 +136,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.1.1"
+  idb_shim:
+    dependency: transitive
+    description:
+      name: idb_shim
+      sha256: "9e7ec816139bfafb69ae4b3668ad29dbd43c53428d6eb31f9332d42bd4fa7205"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.6.1+7"
   leak_tracker:
     dependency: transitive
     description:
@@ -288,6 +296,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.8.0+1"
+  sembast_sqflite:
+    dependency: "direct main"
+    description:
+      name: sembast_sqflite
+      sha256: "45d3aefefe548e221a4fdfe7ca00091639a0544c927cd8c67f26ef35fdac0007"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.2.0+3"
+  sembast_web:
+    dependency: "direct main"
+    description:
+      name: sembast_web
+      sha256: "02ce895fa728b48d36fe28ba165abdfa3d67033e6924316f0dcc9c871f81a538"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.4.0+4"
   sky_engine:
     dependency: transitive
     description: flutter
@@ -301,6 +325,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.10.0"
+  sqflite_common:
+    dependency: transitive
+    description:
+      name: sqflite_common
+      sha256: "761b9740ecbd4d3e66b8916d784e581861fd3c3553eda85e167bc49fdb68f709"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.5.4+6"
   stack_trace:
     dependency: transitive
     description:
