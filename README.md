@@ -32,5 +32,5 @@ sixtick portfolio
 ## 로또  api 
 - ssh -i C:\Users\sixtick3\.ssh\ssh-key-2024-12-21.key ubuntu@144.24.78.242
 - https://lottoapi.duckdns.org/lotto
-
+ 
 
