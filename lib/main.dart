@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:firebase_core/firebase_core.dart'; // 파이어베이스
-import 'firebase_options.dart'; // 파이어베이스
+// import 'package:firebase_core/firebase_core.dart'; // 파이어베이스
+// import 'firebase_options.dart'; // 파이어베이스
 
 import 'package:flutter/foundation.dart';
 import 'package:window_size/window_size.dart';
@@ -12,7 +12,7 @@ import 'widgets/main_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform,); // 파이어베이스 Firebase 초기화 완료 대기
+  // await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform,); // 파이어베이스 Firebase 초기화 완료 대기
   logInit();
   if (kIsWeb) {
     // 웹에서만 동작하는 코드를 삽입하시오. 삽입?? ㅋㅋㅋ

@@ -1,9 +1,9 @@
 // import 'package:firebase_core/firebase_core.dart';
-import 'package:cloud_firestore/cloud_firestore.dart'; // flutter pub add cloud_firestore
+// import 'package:cloud_firestore/cloud_firestore.dart'; // flutter pub add cloud_firestore
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:firebase_auth/firebase_auth.dart'; //flutter pub add firebase_auth
+// import 'package:firebase_auth/firebase_auth.dart'; //flutter pub add firebase_auth
 
 // 파이어 베이스의 기능들 firebase (서버측 기능들을 담고있다. https://console.firebase.google.com) 내부적으로 구글클라우드 프로젝트를 생성함
 // spark 요금제 (무료료)
@@ -87,9 +87,9 @@ class Firebase extends ConsumerWidget {
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
                           // 검증
-                          signIn(controllerEmail.text, controllerPassword.text)
-                              .then((onValue) => showMessage(context,
-                                  onValue.keys.first, onValue.values.first));
+                          // signIn(controllerEmail.text, controllerPassword.text)
+                          //     .then((onValue) => showMessage(context,
+                          //         onValue.keys.first, onValue.values.first));
                           debugPrint('signIn onPressed');
                         } else {
                           debugPrint('signIn onPressed else');
@@ -105,9 +105,9 @@ class Firebase extends ConsumerWidget {
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
                           // 검증
-                          signUp(controllerEmail.text, controllerPassword.text)
-                              .then((onValue) => showMessage(context,
-                                  onValue.keys.first, onValue.values.first));
+                          // signUp(controllerEmail.text, controllerPassword.text)
+                          //     .then((onValue) => showMessage(context,
+                          //         onValue.keys.first, onValue.values.first));
                           debugPrint('signUp onPressed');
                         } else {
                           debugPrint('signUp onPressed else');
@@ -121,7 +121,7 @@ class Firebase extends ConsumerWidget {
                     padding: EdgeInsets.all(24),
                     child: ElevatedButton(
                       onPressed: () {
-                        logout();
+                        // logout();
                       },
                       child: const Text('logout'),
                     ),
@@ -130,7 +130,7 @@ class Firebase extends ConsumerWidget {
                     padding: EdgeInsets.all(24),
                     child: ElevatedButton(
                       onPressed: () {
-                        isLogin();
+                        // isLogin();
                       },
                       child: const Text('check'),
                     ),
@@ -156,8 +156,8 @@ class Firebase extends ConsumerWidget {
       floatingActionButton: ElevatedButton(
           onPressed: () {
             // testData();
-            getEventDetails().then(
-                (onValue) => ref.read(provierList.notifier).state = onValue);
+            // getEventDetails().then(
+            //     (onValue) => ref.read(provierList.notifier).state = onValue);
             debugPrint('getEventDetails onPressed');
           },
           child: const Text('ok')),
@@ -165,66 +165,66 @@ class Firebase extends ConsumerWidget {
   }
 }
 
-void isLogin() {
-  debugPrint(FirebaseAuth.instance.currentUser == null
-      ? ''
-      : FirebaseAuth.instance.currentUser!.email.toString());
-}
+// void isLogin() {
+//   debugPrint(FirebaseAuth.instance.currentUser == null
+//       ? ''
+//       : FirebaseAuth.instance.currentUser!.email.toString());
+// }
 
-Future<void> logout() async {
-  try {
-    await FirebaseAuth.instance.signOut();
-    debugPrint('logOut');
-  } catch (e) {
-    debugPrint('logOut catch $e');
-  }
-}
+// Future<void> logout() async {
+//   try {
+//     await FirebaseAuth.instance.signOut();
+//     debugPrint('logOut');
+//   } catch (e) {
+//     debugPrint('logOut catch $e');
+//   }
+// }
 
-Future<Map<String, String>> signIn(String emailAddress, String password) async {
-  try {
-    // setState(() => _loading = true); // 로딩 시작
-    UserCredential userCredential =
-        await FirebaseAuth.instance.signInWithEmailAndPassword(
-      email: emailAddress,
-      password: password,
-    );
+// Future<Map<String, String>> signIn(String emailAddress, String password) async {
+//   try {
+//     // setState(() => _loading = true); // 로딩 시작
+//     UserCredential userCredential =
+//         await FirebaseAuth.instance.signInWithEmailAndPassword(
+//       email: emailAddress,
+//       password: password,
+//     );
 
-    final user = userCredential.user;
+//     final user = userCredential.user;
 
-    return {'ok': '${user!.email} 환영합니다.'};
-  } on FirebaseAuthException catch (e) {
-    if (e.code == 'user-not-found') {
-      return {'error': '사용자가 존재하지 않습니다.'};
-    } else if (e.code == 'wrong-password') {
-      return {'error': '비밀번호가 잘못되었습니다.'};
-    } else {
-      return {'error': '${e.message}'};
-    }
-  } catch (e) {
-    return {'error': e.toString()};
-  }
-}
+//     return {'ok': '${user!.email} 환영합니다.'};
+//   } on FirebaseAuthException catch (e) {
+//     if (e.code == 'user-not-found') {
+//       return {'error': '사용자가 존재하지 않습니다.'};
+//     } else if (e.code == 'wrong-password') {
+//       return {'error': '비밀번호가 잘못되었습니다.'};
+//     } else {
+//       return {'error': '${e.message}'};
+//     }
+//   } catch (e) {
+//     return {'error': e.toString()};
+//   }
+// }
 
-Future<Map<String, String>> signUp(String emailAddress, String password) async {
-  try {
-    final credential =
-        await FirebaseAuth.instance.createUserWithEmailAndPassword(
-      email: emailAddress,
-      password: password,
-    );
-    debugPrint('signUp credential : ${credential.toString()}');
-  } on FirebaseAuthException catch (e) {
-    if (e.code == 'weak-password') {
-      return {'error': 'The password provided is too weak.'};
-    } else if (e.code == 'email-already-in-use') {
-      return {'error': 'The account already exists for that email.'};
-    }
-  } catch (e) {
-    debugPrint('catch : ${e.toString()}');
-    return {'error': e.toString()};
-  }
-  return {'ok': 'create account'};
-}
+// Future<Map<String, String>> signUp(String emailAddress, String password) async {
+//   try {
+//     final credential =
+//         await FirebaseAuth.instance.createUserWithEmailAndPassword(
+//       email: emailAddress,
+//       password: password,
+//     );
+//     debugPrint('signUp credential : ${credential.toString()}');
+//   } on FirebaseAuthException catch (e) {
+//     if (e.code == 'weak-password') {
+//       return {'error': 'The password provided is too weak.'};
+//     } else if (e.code == 'email-already-in-use') {
+//       return {'error': 'The account already exists for that email.'};
+//     }
+//   } catch (e) {
+//     debugPrint('catch : ${e.toString()}');
+//     return {'error': e.toString()};
+//   }
+//   return {'ok': 'create account'};
+// }
 
 void showMessage(BuildContext context, String title, String content) {
   showDialog(
@@ -270,7 +270,7 @@ class EventDetail {
 
   EventDetail.fromMap(dynamic obj) {
     //QueryDocumentSnapshot<Map<String, dynamic>>
-    id = (obj as QueryDocumentSnapshot).id; // obj['id']; id는 이형식으로 가져올 수 없음
+    // id = (obj as QueryDocumentSnapshot).id; // obj['id']; id는 이형식으로 가져올 수 없음
     _description = obj['description'];
     _date = obj['date'];
     _startTime = obj['start_time'];
@@ -295,28 +295,28 @@ class EventDetail {
   }
 }
 
-Future<List<EventDetail>> getEventDetails() async {
-  var list = <EventDetail>[];
-  FirebaseFirestore db = FirebaseFirestore.instance;
-  var data = await db.collection('event_details').get();
-  var details = data.docs.toList();
-  // details.forEach((action){
-  //   list.add(EventDetail.fromMap(action));
-  // }); // 익명함수를 쓸거면 for문이 빠름름
+// Future<List<EventDetail>> getEventDetails() async {
+//   var list = <EventDetail>[];
+//   // FirebaseFirestore db = FirebaseFirestore.instance;
+//   var data = await db.collection('event_details').get();
+//   var details = data.docs.toList();
+//   // details.forEach((action){
+//   //   list.add(EventDetail.fromMap(action));
+//   // }); // 익명함수를 쓸거면 for문이 빠름름
 
-  for (var value in details) {
-    debugPrint('getEventDetails value : ${value.data().toString()}');
-    list.add(EventDetail.fromMap(value));
-  }
-  return list;
-}
+//   for (var value in details) {
+//     debugPrint('getEventDetails value : ${value.data().toString()}');
+//     list.add(EventDetail.fromMap(value));
+//   }
+//   return list;
+// }
 
-Future testData() async {
-  debugPrint('testData');
-  FirebaseFirestore db = FirebaseFirestore.instance;
-  var data = await db.collection('event_details').get();
-  var details = data.docs.toList();
-  details.forEach((action) {
-    debugPrint(action.id);
-  });
-}
+// Future testData() async {
+//   debugPrint('testData');
+//   FirebaseFirestore db = FirebaseFirestore.instance;
+//   var data = await db.collection('event_details').get();
+//   var details = data.docs.toList();
+//   details.forEach((action) {
+//     debugPrint(action.id);
+//   });
+// }

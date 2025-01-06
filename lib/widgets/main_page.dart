@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:portpolio/widgets/bloc.dart';
-import 'package:portpolio/widgets/dropdownbutton_test.dart';
-import 'package:portpolio/widgets/firebase.dart';
+// import 'package:portpolio/widgets/dropdownbutton_test.dart';
+// import 'package:portpolio/widgets/firebase.dart';
 import 'package:portpolio/widgets/llm_page.dart';
 import 'package:portpolio/widgets/movie_page.dart';
 import 'package:portpolio/widgets/pong_page.dart';
-import 'package:portpolio/widgets/riverpod_test.dart';
+// import 'package:portpolio/widgets/riverpod_test.dart';
 
 // 페이지들
 import 'resume_page.dart';
@@ -25,7 +25,7 @@ final Map<String, Widget> pageMap = {
   "PONG GAME" : PongStateful(),
   "MOVIE" : MoviePage(),
   "BLOC" : BlocTestPage(),
-  "FIREBASE" : Firebase(),
+  // "FIREBASE" : Firebase(),
   // "riverpod TEST" : RiverpodTest1(),
   // "dropdownbutton TEST" : DropdownButtonTest(), 
 };
