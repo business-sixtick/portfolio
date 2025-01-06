@@ -2,6 +2,35 @@ import 'dart:math';
 import 'package:logging/logging.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/material.dart';
+import 'dart:async';
+
+class Bloc<T> {
+  Bloc(T initialState) {
+    _state = initialState; // 초기 상태 설정
+    _stateController = StreamController<T>.broadcast(); // 상태 스트림  broadcast 는 리스너를 여러개 등록할수 있다.
+    _stateController.stream.listen((onData) => _state = onData);
+  }
+
+  late T _state; // 현재 상태
+  late final StreamController<T> _stateController; // 상태 관리 스트림
+
+  // 상태를 외부에서 구독할 수 있는 Stream
+  Stream<T> get stateStream => _stateController.stream;
+
+  // 현재 상태를 가져오는 getter
+  T get state => _state;
+
+  // 상태를 업데이트하는 메서드
+  set state(T newState) {
+    // _state = newState; // 상태 업데이트
+    _stateController.sink.add(newState); // 새로운 상태를 스트림에 전송
+  }
+
+  // 메모리 누수를 방지하기 위해 스트림 닫기
+  void dispose() {
+    _stateController.close();
+  }
+}
 
 void showMessage(BuildContext context, String title, String content) {
   showDialog(
