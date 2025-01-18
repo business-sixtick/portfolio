@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:portpolio/widgets/bloc.dart';
 // import 'package:portpolio/widgets/dropdownbutton_test.dart';
 // import 'package:portpolio/widgets/firebase.dart';
-import 'package:portpolio/widgets/llm_page.dart';
+// import 'package:portpolio/widgets/llm_page.dart';
 import 'package:portpolio/widgets/movie_page.dart';
 import 'package:portpolio/widgets/pong_page.dart';
 import 'package:portpolio/widgets/todo_page.dart';
@@ -23,7 +23,7 @@ final Map<String, Widget> pageMap = {
   "RESUME" : const ResumePage(),
   "LOTTO" : LottoPage(),
   "TODO" : TodoPage(),
-  "LLM" : LLMPage(),
+  // "LLM" : LLMPage(),
   "PONG GAME" : PongStateful(),
   "MOVIE" : MoviePage(),
   "BLOC" : BlocTestPage(),
