@@ -49,6 +49,39 @@ void showMessage(BuildContext context, String title, String content) {
   );
 }
 
+Future<String> showDialogText(BuildContext context, String title) async {
+  String text = '';
+  await showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text(title),
+        content: TextField(
+          autofocus: true,
+          onChanged: (value){ text = value;},
+          decoration: const InputDecoration(hintText: '할 일을 입력하세요.'),
+          onSubmitted: (value){ // 엔터 쳤을 경우 저장하고 창 닫음. 
+            text = value;
+            Navigator.of(context).pop();
+          },
+        ),
+        actions: [
+          TextButton(
+            onPressed: (){text = ''; Navigator.of(context).pop();},
+            child: const Text('CANCEL')
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('OK')
+          ),
+        ],
+      );
+    }
+  );
+
+  return text;
+}
+
 // Logger
 
 final log = Logger('MyLogger');
