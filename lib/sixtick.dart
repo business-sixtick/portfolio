@@ -51,13 +51,16 @@ void showMessage(BuildContext context, String title, String content) {
 
 Future<String> showDialogText(BuildContext context, String title) async {
   String text = '';
+  //  final textFieldFocusNode = FocusNode(); // FocusNode 생성, 작동안됨됨 
+
   await showDialog(
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
         title: Text(title),
         content: TextField(
-          autofocus: true,
+          // autofocus: true, // 웹에서 오류가 나네?
+          // focusNode: textFieldFocusNode, // FocusNode 연결
           onChanged: (value){ text = value;},
           decoration: const InputDecoration(hintText: '할 일을 입력하세요.'),
           onSubmitted: (value){ // 엔터 쳤을 경우 저장하고 창 닫음. 
@@ -78,6 +81,10 @@ Future<String> showDialogText(BuildContext context, String title) async {
       );
     }
   );
+
+
+  // 다이얼로그가 닫힌 후 FocusNode를 해제
+  // textFieldFocusNode.dispose();
 
   return text;
 }

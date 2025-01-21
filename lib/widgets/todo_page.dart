@@ -8,6 +8,7 @@ import 'package:path/path.dart' as path; // flutter pub add path
 import 'package:portpolio/sixtick.dart';
 import 'package:sembast_web/sembast_web.dart';
 
+
 class TodoPage extends StatefulWidget {
   @override
   State<TodoPage> createState() => _TodoPageState();
@@ -26,17 +27,18 @@ class _TodoPageState extends State<TodoPage> {
   }
 
   Future<List<Todo>> openDatabase() async {
-    // get the application documents directory
-    final dir = await path_provider.getApplicationDocumentsDirectory();
-    // make sure it exists
-    await dir.create(recursive: true);
-    debugPrint('dir.path : ${dir.path}');
-    // build the database path
-    final dbPath = path.join(dir.path, 'todo.db');
+    
     // open the database
     if(kIsWeb){
-      db = await databaseFactoryWeb.openDatabase('todo.db'); // 웹일때 
+      db = await databaseFactoryWeb.openDatabase('todo'); // 웹일때 
     } else {
+      // get the application documents directory
+      final dir = await path_provider.getApplicationDocumentsDirectory();
+      // make sure it exists
+      await dir.create(recursive: true);
+      debugPrint('dir.path : ${dir.path}');
+      // build the database path
+      final dbPath = path.join(dir.path, 'todo.db');
       db = await databaseFactoryIo.openDatabase(dbPath);
     }
     debugPrint('openDatabase db : $db');
@@ -125,7 +127,47 @@ class _TodoPageState extends State<TodoPage> {
               
             floatingActionButton: FloatingActionButton(
               child: const Icon(Icons.add),
-              onPressed: () async {
+              onPressed: false //kIsWeb 
+              ? () async {
+                String text = '';
+                await Navigator.push(context, 
+                  MaterialPageRoute(builder: (context) => Scaffold(
+                    appBar: AppBar(title: const Text('TODO ADD'),),
+                    body: Center(
+                      child: Container(
+                        width: 200,
+                        child: Container(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              TextField(
+                                onChanged: (value){ text = value;},
+                                decoration: const InputDecoration(hintText: '할 일을 입력하세요.'),
+                                onSubmitted: (value){ // 엔터 쳤을 경우 저장하고 창 닫음. 
+                                  text = value;
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                              const SizedBox(height: 50,),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  ElevatedButton(onPressed: ()async{
+                                    await openDatabase();
+                                  }, child: const Text('CANCEL')),
+                                  const SizedBox(width: 20,),
+                                  ElevatedButton(onPressed: (){}, child: const Text('OK')),
+                                ],
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  )));
+                  debugPrint('text : $text');
+              }
+              : () async {
               String ret = await showDialogText(context, 'TODO');  // 입력 다이얼로그 
               debugPrint('showDialogText ret : $ret');
               // ret 가 빈문자열이면 등록하지 않는다. 
